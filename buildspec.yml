@@ -1,14 +1,26 @@
 version: 0.2
+
 phases:
   install:
-    runtime-versions:
-      nodejs: latest
     commands:
-      # If needed, you can add commands for dependency installation
+      - echo Installing dependencies...
+      - python3 -m venv .venv
+      - source .venv/bin/activate
+      - pip install --upgrade pip
+      - pip install pytest flask
+  pre_build:
+    commands:
+      - echo Running pre-build steps...
+      - source .venv/bin/activate && pytest --version
   build:
     commands:
-      - echo "Build completed on `date`"
-  artifacts:
-    files:
-      - '**/*'
-  base-directory: .
+      - echo Running build steps...
+      - source .venv/bin/activate 
+      - echo Packaging application...
+  post_build:
+    commands:
+      - echo Build completed successfully.
+artifacts:
+  files:
+    - app-package.zip
+    - '**/*.log'
